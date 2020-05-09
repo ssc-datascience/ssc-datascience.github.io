@@ -1,0 +1,40 @@
+---
+title: "Virtual Workshop on Analysis of Unstructured Text Data"
+subtitle: "SSC - Data Science Section"
+
+---
+
+## When
+
+Thursday June 4th; 1:00-2:30 and 2:30-4:00
+
+## Instructors
+
+Dave Campbell and Nathan Taback
+
+
+## Tentative Topics
+
+### Part 1
+
+Data Acquisition: Tokenization, bigrams, ngrams, web scraping, Social media APIs
+
+Explorations and transformations: Sentiment lexicons; potential for bias, trump vs Trump, stop words
+Measures of frequency.
+Visualization
+Comparing word usage between two authors or texts
+Word Co-occurence?  
+Regular expressions?
+
+
+### Part 2 
+
+Statistical Models for Unstructured Text 
+
+Topic modelling; LDA
+Word2Vec
+Author Attribution models → P(Author | language) 
+
+Open problems and general discussion
+Excess sensitivity in comparing distributions of Word2Vec embeddings on hyperspheres 
+Inference in LDA; Gibbs sampling won’t really giving inference.

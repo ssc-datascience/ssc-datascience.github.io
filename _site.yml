@@ -1,0 +1,8 @@
+name: "unstructured text"
+output_dir: "."
+navbar:
+  title: "Unstructured Text"
+  left:
+    - text: "Home"
+      href: index.html
+    
