@@ -30,7 +30,7 @@ Thursday June 4th; 1:00-2:30 and 2:30-4:00
 
 [Slides - pdf](workshopslides1.pdf)
 
-[Slides - Rmd (xaringan)](_workshopslides1.Rmd), [css style file](slides.css)
+[Slides - Rmd (xaringan)](workshopslides1.Rmd), [css style file](slides.css)
 
 [Justin Trudeau tweets](JT20tweets_may25.csv)
 
