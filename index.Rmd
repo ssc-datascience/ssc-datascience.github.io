@@ -10,21 +10,33 @@ Thursday June 4th; 1:00-2:30 and 2:30-4:00
 
 ## Instructors
 
-Dave Campbell and Nathan Taback
+[Dave Campbell](https://people.math.carleton.ca/~davecampbell/Dave_Campbell.html) and [Nathan Taback](http://utstat.toronto.edu/nathan/)
 
 
-## Tentative Topics
 
-### Part 1
+# Part 1
 
-Data Acquisition: Tokenization, bigrams, ngrams, web scraping, Social media APIs
+## Topics
 
-Explorations and transformations: Sentiment lexicons; potential for bias, trump vs Trump, stop words
-Measures of frequency.
-Visualization
-Comparing word usage between two authors or texts
-Word Co-occurence?  
-Regular expressions?
+- R Libraries for Working with Text
+- Importing unstructured text into R: copy/paste, external API, webscraping, R libraries
+- Regular expressions and text normalization (e.g., tokenization)
+- N-Grams
+- Word Vectors and Matricies
+
+## Slides and Materials
+
+[Slides - html](workshopslides1.html)
+
+[Slides - pdf](workshopslides1.pdf)
+
+[Slides - Rmd (xaringan)](_workshopslides1.Rmd), [css style file](slides.css)
+
+[Justin Trudeau tweets](JT20tweets_may25.csv)
+
+[stringr cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/strings.pdf)
+
+
 
 
 ### Part 2 

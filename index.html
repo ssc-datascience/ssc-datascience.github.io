@@ -13,6 +13,7 @@
 
 <title>Virtual Workshop on Analysis of Unstructured Text Data</title>
 
+<script src="site_libs/header-attrs-2.1/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -298,21 +299,33 @@ $(document).ready(function () {
 </div>
 <div id="instructors" class="section level2">
 <h2>Instructors</h2>
-<p>Dave Campbell and Nathan Taback</p>
+<p><a href="https://people.math.carleton.ca/~davecampbell/Dave_Campbell.html">Dave Campbell</a> and <a href="http://utstat.toronto.edu/nathan/">Nathan Taback</a></p>
 </div>
-<div id="tentative-topics" class="section level2">
-<h2>Tentative Topics</h2>
-<div id="part-1" class="section level3">
-<h3>Part 1</h3>
-<p>Data Acquisition: Tokenization, bigrams, ngrams, web scraping, Social media APIs</p>
-<p>Explorations and transformations: Sentiment lexicons; potential for bias, trump vs Trump, stop words Measures of frequency. Visualization Comparing word usage between two authors or texts Word Co-occurence?<br />
-Regular expressions?</p>
+<div id="part-1" class="section level1">
+<h1>Part 1</h1>
+<div id="topics" class="section level2">
+<h2>Topics</h2>
+<ul>
+<li>R Libraries for Working with Text</li>
+<li>Importing unstructured text into R: copy/paste, external API, webscraping, R libraries</li>
+<li>Regular expressions and text normalization (e.g., tokenization)</li>
+<li>N-Grams</li>
+<li>Word Vectors and Matricies</li>
+</ul>
 </div>
+<div id="slides-and-materials" class="section level2">
+<h2>Slides and Materials</h2>
+<p><a href="workshopslides1.html">Slides - html</a></p>
+<p><a href="workshopslides1.pdf">Slides - pdf</a></p>
+<p><a href="_workshopslides1.Rmd">Slides - Rmd (xaringan)</a>, <a href="slides.css">css style file</a></p>
+<p><a href="JT20tweets_may25.csv">Justin Trudeau tweets</a></p>
+<p><a href="https://github.com/rstudio/cheatsheets/blob/master/strings.pdf">stringr cheatsheet</a></p>
 <div id="part-2" class="section level3">
 <h3>Part 2</h3>
 <p>Statistical Models for Unstructured Text</p>
 <p>Topic modelling; LDA Word2Vec Author Attribution models → P(Author | language)</p>
 <p>Open problems and general discussion Excess sensitivity in comparing distributions of Word2Vec embeddings on hyperspheres Inference in LDA; Gibbs sampling won’t really giving inference.</p>
+</div>
 </div>
 </div>
 
