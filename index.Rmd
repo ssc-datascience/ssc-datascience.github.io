@@ -12,6 +12,19 @@ Thursday June 4th; 1:00-2:30 and 2:30-4:00
 
 [Dave Campbell](https://people.math.carleton.ca/~davecampbell/Dave_Campbell.html) and [Nathan Taback](http://utstat.toronto.edu/nathan/)
 
+# R libraries
+
+ All code runs in R 4.0.0 and most or all runs in R 3.X
+
+- Data Acquisition tools: gutenbergr, genius, rvest, RSelenium
+- Tidyverse Tools: tidyverse, tidytext, dplyr, stringr, janitor, ggplot2
+- LDA libraries: topicmodels, tm, LDA
+- Word2Vec library installs from github:
+
+library(devtools)
+install_github("bmschmidt/wordVectors")
+library(wordVectors)
+
 
 
 # Part 1
@@ -45,12 +58,10 @@ Thursday June 4th; 1:00-2:30 and 2:30-4:00
 
 Statistical Models for Unstructured Text 
 
-- Topic modelling; LDA
-- Word2Vec
-- Author Attribution models → P(Author | language) 
+- Sentiment analysis models
+- Topic modelling; LDA and what about inference?
+- Word2Vec, what it is and what about inference
 - Open problems and general discussion
-- Excess sensitivity in comparing distributions of Word2Vec embeddings on hyperspheres 
-- Inference in LDA; Gibbs sampling won’t really giving inference.
 
 ## Slides and Materials
 
