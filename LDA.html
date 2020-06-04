@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dave Campbell" />
+
+<meta name="date" content="2020-03-06" />
+
+<title>Topic Modelling; LDA (with possible pre-workshop typos)</title>
+
+<script src="site_libs/header-attrs-2.1/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Unstructured Text</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Topic Modelling; LDA (with possible pre-workshop typos)</h1>
+<h4 class="author">Dave Campbell</h4>
+<h4 class="date">03/06/2020</h4>
+
+</div>
+
+
+<pre class="r"><code>library(MASS)
+library(gutenbergr)
+library(tidytext)
+library(topicmodels)
+library(tm)
+library(ggplot2)
+library(dplyr)
+library(LDA)</code></pre>
+<div id="clustering" class="section level1">
+<h1>Clustering</h1>
+<p>Mixture models suggest a distribution might represent several types of individuals. In some of our courses we see a grade distribution with multiple modes or if we go with a classic <span class="math inline">\(Y_i\)</span> is the velocity of the <span class="math inline">\(i^{th}\)</span> galaxy.</p>
+<pre class="r"><code># this is the only time we will use the MASS library
+hist(MASS::galaxies,35)</code></pre>
+<p>We often interpret this as being a heterogeneous group where there are subgroups, perhaps modelling them as: <span class="math display">\[P(Y_i\mid\theta,\sigma, p) =  \sum_{k=1}^{K} p_k N(Y_i\mid\theta_k,\sigma^2_k).\]</span> Although there is a single population, we think of individuals as belonging to different subgroups.</p>
+<p>Most clustering relies on this concept and tries to find the subgroups based on groups of individuals who are more similar to each other than they are to the other groups.</p>
+<p>It’s natural to think of an individual as being a member of a single group so that the problem simplifies if we can condition on group membership <span class="math inline">\(Z\)</span>. <span class="math display">\[P(Z_i=k\mid p_k)=p_k\]</span> <span class="math display">\[P(Y_i\mid Z_i=k,\theta,\sigma, p) =  N(Y_i\mid\theta_k,\sigma^2_k)\]</span> <span class="math display">\[P(Y_i, Z_i=k\mid \theta,\sigma, p) = p_k N(Y_i\mid\theta_k,\sigma^2_k)\]</span> <span class="math display">\[P( Z_i=k\mid Y_i,\theta,\sigma, p) = \frac{  p_k N(Y_i\mid\theta_k,\sigma^2_k)}{ \sum_{j=1}^{K}  p_j N(Y_i\mid\theta_j,\sigma^2_j)}\]</span></p>
+<p>Soft (or fuzzy) clustering instead considers each individual to be divided between some or all of the groups. Statistically, we model individual as having a Dirichlet allocation model dividing it between groups.</p>
+</div>
+<div id="lda" class="section level1">
+<h1>LDA</h1>
+<p>In Latent Dirichlet Allocation (LDA), each document has a latent allocation of topics. This document might be 39% <em>computing</em> and 60% <em>statistics</em>, but only 1% <em>recipes</em>. Each topic has a categorical distribution providing probabilities for all the words. The <em>statistics</em> topic would likely have a very low probablitity of the word <em>borscht</em>, but a high probability allocated to words like <em>distribution</em> and <em>Dirichlet</em>.</p>
+<p>The original LDA method comes from this exceedingly high impact paper: D.Blei, A. NG, M. Jordan (2003) <a href="http://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf">“Latent Dirichlet Allocation”, JMLR</a>. There are many variants and computational improvements, but we’ll focus here anyways.</p>
+<p>LDA was constructed based on a generative process for each document in a corpus. Each document is considered a <em>bag of words</em>, so word order is ignored.</p>
+<div id="generative-model" class="section level2">
+<h2>Generative model</h2>
+<ol style="list-style-type: decimal">
+<li><p>Sample a word allocation distribution for each topic <span class="math inline">\(\phi_k\sim Dir(\beta)\)</span>, for the <span class="math inline">\(k=1,...,K\)</span> topics.</p></li>
+<li><p>For document <span class="math inline">\(d\)</span> sample a topic allocation <span class="math inline">\(\theta_d\sim Dir(\alpha)\)</span>. These are the topic proportions for this document.</p></li>
+<li><p>For each word <span class="math inline">\(w_n\)</span>, <span class="math inline">\(n\in 1,...,N_d\)</span> in document <span class="math inline">\(d\)</span>:</p>
+<ol style="list-style-type: lower-alpha">
+<li>Sample its topic <span class="math inline">\(z_{dn} \sim Multinomial(\theta_d)\)</span>. The <span class="math inline">\(n^{th}\)</span> word position in document <span class="math inline">\(d\)</span> has a single latent topic <span class="math inline">\(z_{dn}\)</span>.</li>
+<li>Sample a word <span class="math inline">\(w_n\)</span> from <span class="math inline">\(p(w_n \mid \phi_{z_{dn}})\)</span>, a categorical probability disribution with word probability <span class="math inline">\(\phi_{z_{dn}}\)</span> that is specific to the topic <span class="math inline">\(z_n\)</span>.</li>
+</ol></li>
+</ol>
+<p>Including priors <span class="math inline">\(\phi\sim Dir(\beta)\)</span> and <span class="math inline">\(\theta \sim Dir(\alpha)\)</span> we obtain the graphical model for what the original Blei paper called smoothed LDA (although they used slightly different notation, the above is pretty standard notation) <img src="LDAgraphic.png" title="What the Blei et al paper called smoothed LDA" alt="LDAmodel" /></p>
+<p>Many variations of LDA exist.</p>
+<p>Of interest is interpreting the topic allocations <span class="math inline">\(\theta\)</span>. We might be interested in expanding the model to do inference, but… we’ll come back to that.</p>
+</div>
+<div id="clustering-books" class="section level2">
+<h2>Clustering books</h2>
+<p>Let’s start with an obvious example taking some books from Gutenberg.</p>
+<pre class="r"><code>
+Wells = gutenbergr::gutenberg_works(author ==&quot;Wells, H. G. (Herbert George)&quot;)
+Wells
+
+Montgomery = gutenbergr::gutenberg_works(author ==&quot;Montgomery, L. M. (Lucy Maud)&quot;)
+Montgomery
+
+Dickens = gutenbergr::gutenberg_works(author ==&quot;Dickens, Charles&quot;)
+Dickens
+</code></pre>
+<p>Consider a selection of 3 books from each author</p>
+<pre class="r"><code>#Wellsbooks = gutenberg_download(c(36,3797,5230,1138,775), meta_fields = c(&quot;title&quot;,&quot;author&quot;))
+Wellsbooks = gutenberg_download(c(36,1138,5230), meta_fields = c(&quot;title&quot;,&quot;author&quot;))
+unique(Wellsbooks$title)
+#Montgomerybooks = gutenberg_download(c(45,51,544,5341,5343), meta_fields = c(&quot;title&quot;,&quot;author&quot;))
+Montgomerybooks = gutenberg_download(c(45,51,544), meta_fields = c(&quot;title&quot;,&quot;author&quot;))
+unique(Montgomerybooks$title)
+#Dickensbooks = gutenberg_download(c(776,730,786,1400,1392 ), meta_fields = c(&quot;title&quot;,&quot;author&quot;))
+Dickensbooks = gutenberg_download(c(46,98,730 ), meta_fields = c(&quot;title&quot;,&quot;author&quot;))
+unique(Dickensbooks$title)</code></pre>
+<p>Let’s split books into chunks and treat chunks as documents. It doesn’t matter how long a document is, but working with book chapters will have a short compute time.</p>
+<pre class="r"><code>AllBooks = rbind(Wellsbooks,Montgomerybooks,Dickensbooks)
+
+tidy_books = AllBooks %&gt;%
+       group_by(title) %&gt;%      #  group by 
+         mutate(linenumber = row_number(),
+              chapter = cumsum(str_detect(text, regex(&quot;(^chapter\\s+)|(^stave\\s+)|(^[\\divxlc]+(\\.|$))&quot;,ignore_case = TRUE)))) %&gt;%
+             ungroup() %&gt;%
+                unnest_tokens(word, text)  %&gt;%
+                filter(!(gutenberg_id==46 &amp; linenumber&lt;33))   # The table of contents oteherwise folds into very short chapters
+                
+                
+</code></pre>
+<p>Sometimes we get rid of stopwords before converting into document term matrix. This depends a lot on the context.</p>
+<p>Stop word libraries</p>
+<pre class="r"><code># small library that is hard to not like:
+tm::stopwords()
+
+# 3 different stop word lexicons that depend on your context:
+tidytext::stop_words
+table(tidytext::stop_words$lexicon)</code></pre>
+<p>We could further build up character names in the list of stopwords, but in real life we may be more interested in performing this clustering on insurance reports, court documents, and proper names shouldn’t matter as they amount to noise in the documents.</p>
+<pre class="r"><code># build my own stop words
+stops = data.frame(word = c(tm::stopwords(), letters) )
+
+
+wordcount = tidy_books %&gt;%
+ anti_join(stops) %&gt;%
+ filter(chapter !=0) %&gt;%            # get rid of preamble 
+  group_by(title,chapter,author) %&gt;%       # count within a chapter in a document                        
+  count(word,sort=TRUE)%&gt;% 
+  ungroup() %&gt;% 
+  unite(&quot;document&quot;, title:chapter)   # make a new column with document  = title + chapter
+
+  DTM = wordcount %&gt;% cast_dtm(term=word,document=document,value=n)
+</code></pre>
+<p>The document term matrix has one row per document and one colum per word. Matrix entries are the counts of word occurence within a document. The matrix is almost always very sparse.</p>
+</div>
+</div>
+<div id="model-fitting" class="section level1">
+<h1>Model Fitting</h1>
+<p>It’s natural to think of fitting a Latent Dirihlet Allocation model using Bayesian sampling techniques. Indeed we generally use Gibbs sampling or Variational methods to do this.</p>
+<p>The joint distribution over the specific words within the documents <span class="math inline">\(W=[w_1,...]\)</span>, topics for those words <span class="math inline">\(Z=[z_1,...]\)</span>, topic allocations for the <span class="math inline">\(D\)</span> documents <span class="math inline">\(\theta=[\theta_1,...,\theta_D]\)</span>, and word allocation distribution within each of the <span class="math inline">\(K\)</span> topics <span class="math inline">\(\phi=[\phi_1,...\phi_K]\)</span> is</p>
+<p><span class="math display">\[P(W,Z,\theta,\phi\mid \alpha, \beta) = \prod_{i=1}^KP(\phi_k\mid \beta) \prod_{j=1}^MP(\theta_j\mid \alpha)
+\prod_{t=1}^{N_j}P(z_{j,t}\mid \theta_j)P(w_{jt}\mid\phi_{z_{jt}}).\]</span></p>
+<pre class="r"><code># takes about 11 seconds
+k = 3
+
+LDA3 = topicmodels::LDA(DTM, k,method = &quot;VEM&quot;)  #original code from the Blei et al 2003 paper
+LDA3 = topicmodels::LDA(DTM, k,method = &quot;Gibbs&quot;) #collapsed Gibbs came after the Blei paper
+</code></pre>
+</div>
+<div id="about-those-samples" class="section level1">
+<h1>About those samples</h1>
+<p>At this point you are probably wondering why I didn’t specify the number of Gibbs samples and the burn in,… Well, often in literature and in practice people report using 20,000ish Gibbs samples. Sorry that’s a typo, it should be <em>20ish</em> Collapsed Gibbs samples. In general Collapsed Gibbs sampling is used as a stochastic optimizer and get close to a local mode. The collapsed part means that we marginalize over some parameters and then estimate those marginalized parameters afterwards.</p>
+<p>We typically marginalize over topic allocations and word within topic allocations <span class="math display">\[P(z, w\mid \alpha, \beta) = \int \int P\left(z,\phi_{z},\theta, w\mid \alpha, \beta\right)d\theta d\phi,\]</span></p>
+<p>All of the Collapsed Gibbs Sampling then reduces to a simpler problem that could be thought of as having a likelihood term <span class="math inline">\(P(w_{dn}\mid z_{dn})\)</span> and a hierarchical model for the word specific topic allocations <span class="math inline">\(P(z_{dn}\mid \alpha, \beta)\)</span>.</p>
+<p>Collapsed Gibbs scales well, can be distributed nicely, and converges quickly. However, in practice, convergence is not towards a target distribution but rather to something close to an optimum.</p>
+<p>For Document d, topic k, word index n, and vocabulary of size V after the sampler has burned-in, estimate: ￼</p>
+<p><span class="math display">\[\hat{\theta}_{dk}\approx \frac{\sum_n^{N_d}I\!I(z_{dn}=k) +\alpha_k}{\sum_{i=1}^K \sum_n^{N_d}I\!I(z_{dn}=k) +\alpha_n}\]</span></p>
+<p><span class="math display">\[\hat{\phi}_{kv}\approx \frac{\sum_{d=1}^M\sum_{n}^{N_d} I\!I(w_{dn}=v \&amp;z_{in}=k)+\beta_v}{\sum_{r=1}^V \sum_{d=1}^M\sum_{n}^{N_d} I\!I(w_{dn}=r \&amp;z_{dn}=k)  +
+\beta_r}\]</span></p>
+<p>Samplers have to deal with an enormous label switching problem rendering inference on <span class="math inline">\(theta\)</span> or <span class="math inline">\(phi\)</span> complex and essentially useless unless one can condition on some sort of topic structure. As a result you won’t be able to get the (Collapsed) Gibbs samples from any of the software, they just return <span class="math inline">\(\hat{\theta}\)</span> and <span class="math inline">\(\hat{\phi}\)</span>.</p>
+<p>Variational methods directly target <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\phi\)</span> and are used but Collapsed Gibbs tends to be fastest at larger scales.</p>
+</div>
+<div id="some-insight-from-our-book-clustering" class="section level1">
+<h1>Some insight from our book clustering</h1>
+<p>Their <span class="math inline">\(\beta\)</span> = probability of a word given a topic</p>
+<pre class="r"><code>
+tidy_lda = tidy(LDA3)
+top_terms = tidy_lda %&gt;%
+  group_by(topic) %&gt;%
+  top_n(20, beta) %&gt;%
+  ungroup() %&gt;%
+  arrange(topic, -beta)
+top_terms
+
+</code></pre>
+<p>Or in plots:</p>
+<pre class="r"><code>
+
+top_terms %&gt;%
+  mutate(term = reorder_within(term, beta, topic)) %&gt;%
+  group_by(topic, term) %&gt;%    
+  arrange(desc(beta)) %&gt;%  
+  ungroup() %&gt;%
+ 
+ 
+ ggplot(aes(term, beta, fill = as.factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  scale_x_reordered() +
+  labs(title = &quot;Top  terms in each  topic&quot;,
+       x = NULL, y = expression(beta)) +
+  facet_wrap(~ topic, ncol = 4, scales = &quot;free&quot;)
+  
+  </code></pre>
+<p>Their <span class="math inline">\(\gamma\)</span> = probability of topic within document</p>
+<pre class="r"><code>lda_gamma =  tidy(LDA3, matrix = &quot;gamma&quot;)
+
+lda_gamma$title =  stringr::str_replace_all(lda_gamma$document, pattern=&quot;\\_\\d+&quot;, replacement = &quot;&quot;)
+lda_gamma
+
+ lda_gamma %&gt;% left_join(unique(AllBooks[,c(&quot;title&quot;,&quot;author&quot;)])) %&gt;%
+  mutate(title = reorder(title, gamma * topic)) %&gt;%
+  ggplot(aes(factor(topic), gamma,fill = as.factor(author))) +
+  geom_boxplot() +
+  labs(title = &quot;Topic allocations for chapters within books&quot;,
+       x = &quot;topic&quot;, y = &quot;topic allocation&quot;) +
+  facet_wrap(~ title)
+
+</code></pre>
+</div>
+<div id="further-tricks" class="section level1">
+<h1>Further tricks</h1>
+<ol style="list-style-type: decimal">
+<li><p>If all the documents right now were from newspapers terms like <em>Trump</em> and <em>George Floyd</em> show up in every article. They could be considered stopwords. You could use tf_idf to find and suggest new stopwords, but generally those terms become pushed into a very common topic that appears heavily weighted across all documents. Typically what happens is the more interesting distinguishing words then appear further down the prevalence within a topic.</p></li>
+<li><p>Selecting the number of topics. Typically one would use perplexity. We split the data into training and testing data. The LDA model is built on the training data, then perplexity is calculated over the testing data set. Perplexity is the geometric mean per word likelihood, examining the probability of the words given topic allocation structure and words within topics.<br />
+<span class="math display">\[Perplexity(Doc_{test}) = exp\left\{-\frac{\sum_{doc}log(p(w\mid\theta,\phi))}{\sum_{doc}\{\#\mbox{words is in doc}\}}\right\}\]</span> Low scores of perplexity occur when testing documents are easily allocated to few topics with highly probable words. Perplexity measures how well new documents fit into the topic partitions and hense the ability to compress the data. In soft clustering like LDA, we often want interpretable clusters which are easier with more clusters than perplexity would suggest.</p></li>
+<li><p>Short documents (like Twitter) are too sparse for LDA to be directly useful. Finding ways of clustering tweets is an active area of research. More words are better, especially with a large vocabulary.</p></li>
+</ol>
+</div>
+<div id="inference-tldr-we-have-some-but-there-remain-open-problems." class="section level1">
+<h1>Inference, tl;dr we have some but there remain open problems.</h1>
+<ol style="list-style-type: decimal">
+<li><p>Inference is tricky with LDA. One could try to include covariates into the topic allocations, but it isn’t clear how to estimate them appropriately. Small changes in topic allocations require changes in word allocation and will blur any inference when taking a fully parameterized approach. This is an open area of research. If the SSC meeting were running, one of my students <em>Gabe Phelan</em> (MSc 2020) would have a talk offering a solution.</p></li>
+<li><p>LDA and topic allocations are selected to be parsimonius for the documents but, like principal components, may not be optimal for use in further analysis. Supervised LDA is a model that finds optimal topics that best predict a new variable <span class="math inline">\(Y\)</span>. This is akin to rotating principal components because only a small portion of variation in X is responsible for prediction of Y. The <em>slda.em</em> function from library <em>LDA</em> simultaneously fits topics and a linear model or GLM to estimate Y.</p></li>
+</ol>
+<p>The <em>LDA</em> function in the library <em>topicmodels</em> is the easiest to get started with. However, you have much more control with library <em>lda</em> and its <em>lda.collapsed.gibbs.sampler</em> function, but the data structure is quite different. Rather than working directly with the document term matrix, it takes as input the sequence of words but written as indexes of the vocabulary vector (starting from index 0).</p>
+<p>To sketch out the set up for our books we would need to do the following:</p>
+<pre class="r"><code>vocab = unique(tidy_books$word)
+
+Docs = tidy_books %&gt;% group_by(title, author, chapter) %&gt;%
+          mutate(document = paste(word, collapse = &quot; &quot;)) %&gt;% # un-tokenize back into chapters of text (our documents)
+         dplyr::select(-word) %&gt;%   # get rid of the now redundant &quot;word&quot; column
+         filter(row_number()==1)    # since all rows within a chapter are the same, keep only the first one
+
+doclist = strsplit(tolower(Docs$document),&quot;\\s&quot;)
+
+# now build a time series of vocabulary indices that can be used to reconstruct the original text:
+
+get_terms = function(x, vocab) {
+  index   = match(x, vocab)
+  index   = index[!is.na(index)]
+  rbind(as.integer(index - 1), as.integer(rep(1, length(index))))
+}
+documents = lapply(doclist, get_terms, vocab)
+# Note that the vocabulary index needs to start with index 0 since it is passed to C 
+# whereas R begins with index 1
+#Check that you can map the time series of vocabulary back to the original phrase
+
+vocab[documents[[1]][1,]+1]</code></pre>
+<p>From here you can use <em>documents</em> and <em>vocab</em> as inputs to the <em>library(lda)</em> functions like <em>lda.collapsed.gibbs.sampler</em> and <em>slda.em</em>.</p>
+</div>
+<div id="help-lets-do-another-example" class="section level1">
+<h1>Help! let’s do another example</h1>
+<p>Saving some time by loading Beatles lyrics (from genius)</p>
+<pre class="r"><code>load(&quot;content/post/LookAt_yeartrackalbum.RData&quot;)
+</code></pre>
+<p>The Beatles released records with different titles in the US and UK, so in scraping their discography I ended up with some duplicates. Focusing on their UK releases we get rid of this problem.</p>
+<pre class="r"><code>
+UKalbums = c(&quot;Please Please Me&quot;,
+                &quot;With the Beatles&quot;,
+                &quot;A Hard Day&#39;s Night&quot;,
+                &quot;Beatles for Sale&quot;,
+                &quot;Help!&quot;,
+                &quot;Rubber Soul&quot;,
+                &quot;Revolver&quot;,
+                &quot;Sgt. Pepper&#39;s Lonely Hearts Club Band&quot;,
+                &quot;Magical Mystery Tour&quot;,
+                &quot;Yellow Submarine&quot;,
+                &quot;Abbey Road&quot;,
+                &quot;Let It Be&quot;)
+
+# we could but won&#39;t remove stop words
+#stops = data.frame(word=tm::stopwords())                
+#stops = tidytext::stop_words               
+wordcount = yeartrackalbum  %&gt;%  filter(album %in% UKalbums) %&gt;% #just UK releases
+  unnest_tokens(output = word, input = songlyric) %&gt;%
+  #anti_join(tidytext::stop_words) %&gt;% 
+  #anti_join(stops) %&gt;% 
+  group_by(track_title,album,Year) %&gt;% 
+  count(word,sort=TRUE)%&gt;% 
+  ungroup()
+DTM = wordcount %&gt;% cast_dtm(term=word,document=track_title,value=n)  #all recycled code from earlier
+
+# runs for &lt;10 seconds
+k=9
+BeatlesLDA = LDA(DTM, k,method=&quot;Gibbs&quot;) 
+topics = tidy(BeatlesLDA, matrix = &quot;beta&quot;)
+
+
+
+
+TopWords = topics %&gt;%
+  group_by(topic) %&gt;%               # take an action within topic values
+   top_n(20, beta) %&gt;%               # find the largest 10 values based on the &#39;beta&#39; column
+  ungroup() %&gt;%                        # stop acting within a topic
+  arrange(topic, -beta)                 # sort them 
+
+TopWords %&gt;%
+  mutate(term = reorder_within(term, beta, topic)) %&gt;%  # Used for faceting (glue topic to term) basically make sure that topic 1 is my topic #1
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = &quot;free&quot;) +
+  coord_flip() +
+  scale_x_reordered()</code></pre>
+<p>In many cases this picks out very specific songs because of the sparcity of terms. We could remove sparse words that only appear in a few topics:</p>
+<pre class="r"><code># remove vocabulary terms (columns) which are more than 96.7 percent zero 
+DTM95 = removeSparseTerms(DTM,.967)
+# selecting the threshold is a balancing act.  We only have 152 songs so a word must be in at least 5 songs to be kept.</code></pre>
+<p>However, there is at least one song with only one or two unique words that probably shouldn’t be in the mix. Sometimes with music we end up lyrical placeholders for instrumental songs.<br />
+Those songs since they are akin to outliers in simple linear regression. We will remove sparse documents, i.e. those with less than 5 words or less than 5 unique words since the latter will overemphasize some words. We could just add way more topics and then a few topics become garbage collectors capturing single documents but we do want to explore the general themes if possible.</p>
+<pre class="r"><code>DTM95matrix = as.matrix(DTM95)
+
+Removethese = which(apply(DTM95matrix,1,function(x){sum(x&gt;0)&lt;5 | sum(x)&lt;5}))
+DTM95 = wordcount %&gt;%  filter (!(wordcount$track_title %in% names(Removethese)))%&gt;%
+     cast_dtm(term=word,document=track_title,value=n) %&gt;% 
+     removeSparseTerms(.95)
+     DTM
+     DTM95
+     
+ # runs for &lt;10 seconds
+k=9
+BeatlesLDA = LDA(DTM95, k,method=&quot;Gibbs&quot;) 
+topics = tidy(BeatlesLDA, matrix = &quot;beta&quot;)
+
+
+TopWords = topics %&gt;%
+  group_by(topic) %&gt;%               # take an action within topic values
+   top_n(20, beta) %&gt;%               # find the largest 10 values based on the &#39;beta&#39; column
+  ungroup() %&gt;%                        # stop acting within a topic
+  arrange(topic, -beta)                 # sort them 
+
+TopWords %&gt;%
+  mutate(term = reorder_within(term, beta, topic)) %&gt;%  # Used for faceting (glue topic to term) basically make sure that topic 1 is my topic #1
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = &quot;free&quot;) +
+  coord_flip() +
+  scale_x_reordered()
+    </code></pre>
+</div>
+<div id="references-and-more-to-read" class="section level1">
+<h1>references and more to read</h1>
+<p>Using LDA on scientific papers:</p>
+<p>Thomas L. Griffiths, Mark Steyvers, (2004) “Finding scientific topics” PNAS, 101 5228-5235 <a href="https://www.pnas.org/content/101/suppl_1/5228" class="uri">https://www.pnas.org/content/101/suppl_1/5228</a></p>
+<p>Accelerating Collapsed Gibbs Sampling for LDA:</p>
+<p>Porteous et al (2008) “Fast Collapsed Gibbs Sampling For Latent Dirichlet Allocation”, KDD <a href="https://www.ics.uci.edu/~asuncion/pubs/KDD_08.pdf" class="uri">https://www.ics.uci.edu/~asuncion/pubs/KDD_08.pdf</a></p>
+<p>Distributed computing for LDA Qiu et al (2014) “Collapsed Gibbs Sampling for Latent Dirichlet Allocation on Spark” JMLR: Workshop and Conference Proceedings 36:17–28, <a href="http://proceedings.mlr.press/v36/qiu14.pdf" class="uri">http://proceedings.mlr.press/v36/qiu14.pdf</a></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

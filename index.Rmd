@@ -39,14 +39,26 @@ Thursday June 4th; 1:00-2:30 and 2:30-4:00
 
 
 
-### Part 2 
+# Part 2 
+
+## Topics
 
 Statistical Models for Unstructured Text 
 
-Topic modelling; LDA
-Word2Vec
-Author Attribution models → P(Author | language) 
+- Topic modelling; LDA
+- Word2Vec
+- Author Attribution models → P(Author | language) 
+- Open problems and general discussion
+- Excess sensitivity in comparing distributions of Word2Vec embeddings on hyperspheres 
+- Inference in LDA; Gibbs sampling won’t really giving inference.
 
-Open problems and general discussion
-Excess sensitivity in comparing distributions of Word2Vec embeddings on hyperspheres 
-Inference in LDA; Gibbs sampling won’t really giving inference.
+## Slides and Materials
+
+[LDA - md](LDA.md), [LDA - html](LDA.html)
+
+[Sentiment-Analysis - md](Sentiment-Analysis.md), [Sentiment-Analysis - html](Sentiment-Analysis.html)
+
+[Word2Vec - md](Word2Vec.md), [Word2Vec - html](Word2Vec.html)
+
+
+

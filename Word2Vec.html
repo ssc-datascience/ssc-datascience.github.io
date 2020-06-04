@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dave Campbell" />
+
+
+<title>Word Embeddings (with possible pre-workshop typos)</title>
+
+<script src="site_libs/header-attrs-2.1/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Unstructured Text</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Word Embeddings (with possible pre-workshop typos)</h1>
+<h4 class="author">Dave Campbell</h4>
+<h4 class="date">2020-06-04T12:13:14-05:00</h4>
+
+</div>
+
+
+<pre class="r"><code>library(devtools)
+library(tm)
+install_github(&quot;bmschmidt/wordVectors&quot;) # yup install from GitHub
+library(wordVectors)</code></pre>
+<div id="word-embeddings" class="section level1">
+<h1>Word Embeddings</h1>
+<p>The goal is to convert words into vectors of numbers such that math on the vectors makes sense as math on the words. The classic examples are things like <em>king</em>- <em>man</em> + <em>woman</em> = <em>queen</em> or <em>Paris</em> - <em>France</em> + <em>Canada</em> = <em>Ottawa</em> or <em>Winning</em> - <em>Ottawa</em> + <em>Toronto</em> = <em>Leafs</em></p>
+<p>The concept is to use a model to predict a word from those around it (or the inverse: predict surrounding words from a central word). The process converts vector(s) of dummy variable encoded words into a low dimensional subspace called an embedding dimension. This low dimensional embedding space allows us to do this sort of vector math on words.</p>
+<p>The original paper included two strategies. Borrowing a figure from that paper:</p>
+<div class="figure">
+<img src="Word2Vecfig.png" title="2 strategies in the Mikolov paper" alt="" />
+<p class="caption">Word2Vec</p>
+</div>
+<p>Tomas Mikolov, Kai Chen, Greg Corrado, Jeffrey Dean (2013) <a href="https://arxiv.org/pdf/1301.3781.pdf">“Efficient Estimation of Word Representations in Vector Space”</a>. ICLR</p>
+<p>For a vocabulary of size <span class="math inline">\(V\)</span> which could be <span class="math inline">\(10^6\)</span>ish, consider the current word <span class="math inline">\(w(t)\)</span> at position <span class="math inline">\(t\)</span>. From this figure, the continuous bag of Words (CBOW) model uses a window around a central word (here the window is of size 2) and fits a neural network to these 4 input vectors, each of which is zero everywhere except takes a value of 1 in the location corresponding to the word it represents. The neural network combines these four vectors into a single hidden layer vector of with length <span class="math inline">\(H&lt;&lt;V\)</span>. This hidden layer is combined through an additional transformation to produce an output, here a single vector of length <span class="math inline">\(V\)</span> of probabilities for the central word.</p>
+<p>The Skip-gram model is the opposite, taking a single one-hot encoded vector of length <span class="math inline">\(V\)</span> as an input to the hidden layer. The hidden layer outputs 4 vectors of length <span class="math inline">\(V\)</span>, each with probabilities for the words in positions within the window.</p>
+<p>Borrowing a figure from the second paper from the same group in 2013, vector differences in the hidden layer seem to represent the right kind of behaviour when comparing many countries with their capitals.</p>
+<p>Mikolov et al, (2013)“<a href="https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf">Distributed Representations of Words and Phrases and their Compositionality</a>” NeuIPS.</p>
+<div class="figure">
+<img src="SkipGramVecs.png" title="Embeddings for capitals" alt="" />
+<p class="caption">SkipGram Vectors</p>
+</div>
+<p>The hidden layer embedding of dimension <span class="math inline">\(H\)</span> provides a low dimensional representation where words used in similar ways appear to be ‘close’ together. The skipgram representation is a conversion of a word into vector. We typically measure closeness between vectors via angular (cosine) distance, where, for vectors A, B with components <span class="math inline">\(A_i\)</span>, <span class="math inline">\(B_i\)</span>, the distance between them is</p>
+<p><span class="math display">\[cos(\theta)=\frac{\sum_{i=1}^{N}A_iB_i}{\sqrt{\sum_{i=1}^NA^2_i}\sqrt{\sum_{i=1}^NB^2_i}}.\]</span> Closeness scores are 1 if the words are exactly the same, 0 if orthogonal, and -1 if exactly opposite. One problem is that sometimes antonyms are used in similar ways which would give them high similarity. For example “I love this <em>kale</em>, it’s delicious!” vs “I love this <em>donut</em>, it’s delicious!”</p>
+</div>
+<div id="model-fitting" class="section level1">
+<h1>Model Fitting</h1>
+<p>To be honest, model fitting is slow for a large vocabulary and large text corpus. Considering the skip-gram architecture for clarity, we typically train such a model by maximizing the average log probability of the observed output words in a window of size <span class="math inline">\(c\)</span> over all central words in position <span class="math inline">\(t\in 1,...,T\)</span>, <span class="math display">\[\frac{1}{T}\sum_{t=1}^T\sum_{-c\leq j\leq c, j\not=0} log p(w_{t+j}\mid w_t).\]</span></p>
+<p>The original paper published their <a href="https://code.google.com/p/word2vec">fitted model</a>, but the model is ~3.64GB, and takes several minutes to load into R.</p>
+<p>Consequently we will use a much smaller corpus and fit our own model. I haven’t seen much of a difference between CBOW and skipgram in practice.</p>
+<p>The workhorse library <em>wordVectors</em> is a wrapper to the Google code. The main function:</p>
+<p><em>train_word2vec</em>(<em>text_to_model</em>,<em>name_of_output_file</em>, vectors=<em>Embedding_Dimension</em>,threads=<em>CPU_cores_2_to_use</em>,<br />
+cbow=*binary_logical_1_-&gt;_for_CBOW_0_for_skipgram<em>,window=</em>Window_width<em>, iter=</em>Times_the_algorithm_passes_through_entire_corpus<em>,negative_samples=</em>This_is_complex_see_below*)</p>
+<p>When fitting the model, the training must pass over the entire corpus to update parts of the neural network associated with the observed window of data. The vast majority of the vocabulary is obviously not contained in the short window and is considered a negative (not present) observation. You could update parts of the neural net for the entire corpus for each observed word, or you could just update a random sample taken to be a small number of vocabulary elements. This number of words to update is the <em>negative samples</em> input. Typically for a very large corpus we keep this around 2 or 5 since there are many other opportunities to update the model and larger numbers take longer to run, but for a smaller corpus we often increase to something like 10 or 15. Results are generally quite robust to this number. On a realted note, with a large corpus, we typically use a smaller number of iterations since each pass through the corpus has a lot of training examples.</p>
+<p>As an example we will use a small corpus, the cookbooks example from <em>vignette(“introduction”, “wordVectors”)</em>. The corpus includes 76 texts from Michigan State University library spanning late 18th to early 20th century. This corpus is a set of <span class="math inline">\(T\approx\)</span> 1 million words with a vocabulary size of <span class="math inline">\(V\)</span> = 45,820. We will use a window of size 12. We are using iter = 5 passes through the corpus for the sake of time, but I would prefer to increase that to 10 or 20.</p>
+<p>If you need to download the cookbooks do so <a href="http://archive.lib.msu.edu/dinfo/feedingamerica/cookbook_text.zip">here</a>. Unzip the file and move it to your working directory.</p>
+<pre class="r"><code># takes me about 2:15 to run
+
+T1 = Sys.time()
+model = train_word2vec(&quot;content/post/cookbooks.txt&quot;,&quot;content/post/cookbook_vectors.bin&quot;,
+                       vectors=200,threads=4,cbow=1,window=12,iter=5,negative_samples=7)
+                       
+T2 = Sys.time()                       
+
+(Elapsed = T2-T1)</code></pre>
+<div class="figure">
+<img src="cookbooks.png" title="Raw cookbook data" alt="" />
+<p class="caption">Cookbook text</p>
+</div>
+<p>Words are used in complex ways and often a word changes meaning drastically when considering it as a pair of words, for example <a href="https://genius.com/artists/Parliament"><em>Parliament</em></a> vs <a href="https://visit.parl.ca/sites/Visit/default/en_CA"><em>Parliament Hill</em></a>. In the cookbook data we have such compounds like <em>white_wine</em>, <em>lyonnaise_potatoes</em>, and <em>string_beans</em>. You can automatically produce such groupings by skimming documents to find word pairs that occur frequently and then ‘glueing’ them together. The function <em>wordVectors::word2phrase</em> let’s you set thresholds for how frequently words co-occur before they are joined. It is impossible to separate data cleaning from data analysis. Here the phrasing also created beasts like <em>coffee_dinner</em> and <em>coffee_luncheon</em>.</p>
+<div id="distance-between-words" class="section level2">
+<h2>Distance between words</h2>
+<p>It might be of interest to see what words the embedding space places close to others. Some examples are very succesful and may suggest alternative ingredients.</p>
+<pre class="r"><code>model %&gt;% closest_to(&quot;fish&quot;)
+
+model %&gt;% closest_to(&quot;peach&quot;)
+
+model %&gt;% closest_to(&quot;cinnamon&quot;)
+
+model %&gt;% closest_to(&quot;sweet&quot;)
+
+model %&gt;% closest_to(&quot;coffee_luncheon&quot;)
+
+model %&gt;% closest_to(&quot;coffee_dinner&quot;)
+
+model %&gt;% closest_to(&quot;squirrel&quot;)
+
+model %&gt;% closest_to(&quot;woman&quot;)
+
+model %&gt;% closest_to(&quot;man&quot;)
+</code></pre>
+<p>## Analogues</p>
+<p><em>Fish</em> is to <em>dumpling</em> as <em>apple</em> is to? These analogues make a standard test for the quality of the Word2Vec model.<br />
+```r</p>
+<p>model %&gt;% closest_to(~“dumpling”-“fish”+“apple”,15) model %&gt;% closest_to(“dumpling”,15)</p>
+<pre><code>
+However, the data input is not exactly representative of the population of use cases for a word.  The sampling bias of building a model based on news articles becomes apparent when the Google model is run (large file takes a long time to load, see above for download).
+
+
+```r
+#load in the google pre-trained model:
+# takes about 10 minutes to load
+model = read.vectors(&quot;content/post/GoogleNews-vectors-negative300.bin&quot;)
+model
+#A VectorSpaceModel object of  3000000  words and  300  vectors
+
+
+# examine the model for Paris is to France as Tokyo is to?
+#runtime is ~ 20 seconds
+model %&gt;% closest_to(~ &quot;france&quot; - &quot;paris&quot; + &quot;tokyo&quot;)
+#(often people speed up the model by removing some of the sparse dimensions...)
+
+
+# King vector - Man vector + Woman vector is close to what?
+#runtime is ~ 20 seconds
+model %&gt;% closest_to(~ &quot;king&quot; - &quot;man&quot; + &quot;woman&quot;)
+
+# Man is to Computer Programmer as Woman is to?
+#runtime is ~ 20 seconds
+#i.e. Computer Programmer vector - Man vector + Woman vector is close to what?
+model %&gt;% closest_to(~ &quot;computer_programmer&quot; - &quot;man&quot; + &quot;woman&quot;)
+
+</code></pre>
+<p>The problem with complex models is that their implications are mysterious and difficult to assess.The gendering of words took 3 years to bring out into the open:</p>
+<p>Bolukbasi et al (2016) <a href="https://papers.neurips.cc/paper/6228-man-is-to-computer-programmer-as-woman-is-to-homemaker-debiasing-word-embeddings.pdf">“Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings”</a> NeurIPS</p>
+<p>The problem is not completely solved but that group worked on post-processing to rotate dimensions that should not be gendered. This idea of post-processing has also been performed to improve matching with conventional analogies. Several new versions of Word2Vec are optimized based on matching word probabilities with a penalty placed on deviations from some human determined analogies.</p>
+</div>
+</div>
+<div id="inference-tldr-we-have-none-yet." class="section level1">
+<h1>Inference, tl;dr we have none yet.</h1>
+<p>The embeddings could be normalized, in which case the vectors take values on the unit hyper-sphere. It is tempting to consider a document as a random sample of words. Replacing the words by their embedding vectors projects, in the case of the Google model, 3,000,000 words onto a 300 dimensional sphere.</p>
+<p>We might want to then compare 2 documents, as though they were two samples and test the null hypothesis that they are samples from the same distribution.</p>
+<p>The Von Mises - Fisher Distribution is used to describe samples on the unit sphere. Generally this is used for directional data in <span class="math inline">\(\leq\)</span> 3 dimensions, but it can be used in much higher dimensions. Observations <span class="math inline">\(x\)</span> on a <span class="math inline">\(p-1\)</span> dimensional sphere from a Von Mises - Fisher distribution with mean direction <span class="math inline">\(\mu\)</span> and concentration around the mean <span class="math inline">\(\kappa\)</span> have density</p>
+<p><span class="math display">\[f_p(x,\mu,\kappa)=\frac{\kappa^{p/2-1}}{(2\pi)^{p/2}I_{p/2-1}(\kappa)}(\kappa)exp(\kappa\mu^Tx).\]</span> The <span class="math inline">\(I_{p/2-1}\)</span> is a modified Bessel function of the first kind with order <span class="math inline">\(p/2-1\)</span>.</p>
+<p>The MLE parameter estimate for the mean direction is the vector sum of all vectors divided by the length of the vector,</p>
+<p><span class="math display">\[\hat{\mu}= \frac{\sum_{i=1}^Nx_i}{\mid\mid \sum_{i=1}^Nx_i \mid\mid}.\]</span></p>
+<p>For large <span class="math inline">\(p\)</span>, the concentraion parameter MLE is approximated by</p>
+<p><span class="math display">\[\hat{\kappa}\approx\frac{\bar{r}(p-\bar{r}^2)}{1-\bar{r}^2},\]</span> for average vector <span class="math display">\[\bar{r} = \frac{\mid\mid\sum_i x_i\mid\mid}{n}\]</span></p>
+<p>Hypothesis testing is then ANOVA-ish and scales up to samples from <span class="math inline">\(k\)</span> distributions with hypotheses: <span class="math display">\[H_o:\mu_1=...=\mu_k\]</span> With alternative <span class="math inline">\(H_a:\mu_i\not=\mu_j\)</span> for at least one pair <span class="math inline">\((i,j)\)</span>.</p>
+<p>For k populations with sample sizes <span class="math inline">\(n_1, n_2,…,n_k\)</span> where <span class="math inline">\(n= n_1 + n_2 +…+n_k\)</span> and resultant length <span class="math inline">\(R_i = \mid\mid\sum_{j=1}^{n_i}x_{ij}\mid\mid\)</span> with total resultant length <span class="math inline">\(R = \mid\mid\sum_{i=1}^{k}\sum_{j=1}^{n_i}x_{ij}\mid\mid\)</span> we obtain the test statistic:</p>
+<p><span class="math display">\[W = \frac
+{(n-k)\left(\sum_{i=1}^kR_i-R\right)}
+{(k-1)(n-\sum_{i=1}^kR_i)} \sim F_{(k-1)(p-1), (n-k)(p-1)}\]</span></p>
+<p>In the Google case p was 300. In a small samples of <span class="math inline">\(n=1000\)</span> total words from <span class="math inline">\(k=2\)</span> groups, we end up with degrees of freedom 299 and 298,402. Rather than obtaining the test statistic you should just assume that it comes back with a significant result.</p>
+<p><em>Hypothesis testing remains an open problem, but could be useful for assessing plagerism of ideas or author attribution models.</em></p>
+</div>
+<div id="more-reading" class="section level1">
+<h1>More reading</h1>
+<p>Using Word2Vec to discover new materials:</p>
+<p>Tshitoyan et al (2019) <a href="https://www.nature.com/articles/s41586-019-1335-8">“Unsupervised word embeddings capture latent knowledge from material science literature”</a>, Nature 571, 95-98</p>
+<p>A generalization of Word2Vec:</p>
+<p>Pennington et al. (2014) <a href="https://nlp.stanford.edu/pubs/glove.pdf">“GloVe: Global Vectors for Word Representation”</a> Empirical Methods in Natural Language Processing (EMNLP)</p>
+<p>Excellent book on circular statistics. See Chapter 5 for more options for test statistics on the sphere, but unfortunately it wasn’t designed for our massive dimensions</p>
+<p>Jammalamadaka, S. Rao., and Ambar Sengupta. (2001) “Topics in Circular Statistics”. River Edge, N.J: World Scientific</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
