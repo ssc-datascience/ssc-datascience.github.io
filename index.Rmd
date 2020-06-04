@@ -1,6 +1,6 @@
 ---
 title: "Virtual Workshop on Analysis of Unstructured Text Data"
-subtitle: "SSC - Data Science Section"
+subtitle: "SSC - Data Science and Analytics Section"
 
 ---
 
