@@ -164,6 +164,15 @@ table(get_sentiments("nrc")$sentiment)
 
 Note that each lexicon has a different length and words evolve in meaning over time.  Sick used to be bad, then it was good, now it's so bad that we stay home most of the time.
 
+```r
+
+tidytext::get_sentiments("afinn")[grep(tidytext::get_sentiments("afinn")$word,pattern="sick"),]
+
+tidytext::get_sentiments("bing")[grep(tidytext::get_sentiments("bing")$word,pattern="sick"),]
+
+tidytext::get_sentiments("nrc")[grep(tidytext::get_sentiments("nrc")$word,pattern="sick"),]
+
+```
 
 
 Back to sentiments, let's count the _nrc_ category occurences:
@@ -241,7 +250,7 @@ The bigram object _Biebgrams_ splits the text into sliding groupings of two word
 
 ```r
 # split into bigrams, but keep the original text to make every step clear
-Biebgrams 
+ 
 
 
 Bieber = rbind(Lyrics1,Lyrics2) %>%
@@ -253,7 +262,7 @@ Bieber$lyric = stringr::str_replace_all(Bieber$lyric, pattern="^", replacement =
 
 # Split into bigrams, separate apart the bigram into "PreWord" and "word" and perform lexicon sentiment replacement on the second term ("word") while keeping way too many interim steps for illustration:
 
-Bieber   =  Bieber %>%
+Biebgrams   =  Bieber %>%
             unnest_tokens(output = bigram,input = lyric, token = "ngrams", n=2) %>%
             mutate(originalbigram = bigram) %>%
             separate(bigram, c("PreWord", "word"), sep = " ") %>%
@@ -262,18 +271,18 @@ Bieber   =  Bieber %>%
 
 
 # find bigrams where the first word might negate the second.
-Bieber %>% filter(PreWord %in% c("not","isn't","no"))
+Biebgrams %>% filter(PreWord %in% c("not","isn't","no"))
 # now consider which should be changed.
 
 
-Bieber[which(Bieber$originalbigram=="no patience"),"sentiment"] = "negative"    
-Bieber[which(Bieber$originalbigram=="no approval"),"sentiment"] = "negative"
-Bieber[which(Bieber$originalbigram=="not right") ,"sentiment"] = "negative"
+Biebgrams[which(Biebgrams$originalbigram=="no patience"),"sentiment"] = "negative"    
+Biebgrams[which(Biebgrams$originalbigram=="no approval"),"sentiment"] = "negative"
+Biebgrams[which(Biebgrams$originalbigram=="not right") ,"sentiment"] = "negative"
 
-Bieber[which(Bieber$originalbigram=="no wrong"),"sentiment"] = "positive"
-Bieber[which(Bieber$originalbigram=="not trouble"),"sentiment"] = "positive"
+Biebgrams[which(Biebgrams$originalbigram=="no wrong"),"sentiment"] = "positive"
+Biebgrams[which(Biebgrams$originalbigram=="not trouble"),"sentiment"] = "positive"
 
-Bieber %>% filter(PreWord %in% c("not","isn't","no"))
+Biebgrams %>% filter(PreWord %in% c("not","isn't","no"))
 
 ```
 

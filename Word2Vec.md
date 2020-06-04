@@ -13,7 +13,7 @@ library(wordVectors)
 
 
 # Word Embeddings
-The goal is to convert words into vectors of numbers such that math on the vectors makes sense as math on the words.  The classic examples are things like _king_- _man_ + _woman_ = _queen_  or _Paris_ - _France_ + _Canada_ = _Ottawa_ or   _Winning_ - _Ottawa_ + _Toronto_ = _Leafs_ 
+The goal is to convert words into vectors of numbers such that math on the vectors makes sense as math on the words.  The classic examples are things like _king_ - _man_ + _woman_ = _queen_  or _Paris_ - _France_ + _Canada_ = _Ottawa_ or   _Winning_ - _Ottawa_ + _Toronto_ = _Leafs_ 
 
 The concept is to use a model to predict a word from those around it (or the inverse: predict surrounding words from a central word).  The process converts vector(s) of dummy variable encoded words into a low dimensional subspace called an embedding dimension.  This low dimensional embedding  space allows us to do this sort of vector math on words.
 
@@ -55,8 +55,8 @@ Consequently we will use a much smaller corpus and fit our own model.  I haven't
 
 The workhorse library _wordVectors_ is a wrapper to the Google code.  The main function:
 
-*train_word2vec*(*text_to_model*,*name_of_output_file*,
-        vectors=*Embedding_Dimension*,threads=*CPU_cores_2_to_use*,            
+- *train_word2vec*(*text_to_model*,*name_of_output_file*,
+        vectors=*Embedding_Dimension*,threads=*CPU_cores_to_use*,            
             cbow=*binary_logical_1_->_for_CBOW_0_for_skipgram*,window=*Window_width*,
               iter=*Times_the_algorithm_passes_through_entire_corpus*,negative_samples=*This_is_complex_see_below*) 
       
@@ -118,12 +118,13 @@ model %>% closest_to("man")
  ## Analogues
  
  _Fish_ is to _dumpling_ as _apple_ is to?  These analogues make a standard test for the quality of the Word2Vec model.  
- ```r
+ 
+```r
  
  model %>% closest_to(~"dumpling"-"fish"+"apple",15)
  model %>% closest_to("dumpling",15)
  
- ```
+```
  
  However, the data input is not exactly representative of the population of use cases for a word.  The sampling bias of building a model based on news articles becomes apparent when the Google model is run (large file takes a long time to load, see above for download).
  
@@ -157,7 +158,9 @@ The problem with complex models is that their implications are mysterious and di
 
 Bolukbasi et al (2016) ["Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings"](https://papers.neurips.cc/paper/6228-man-is-to-computer-programmer-as-woman-is-to-homemaker-debiasing-word-embeddings.pdf) NeurIPS
  
- The problem is not completely solved but that group worked on post-processing to rotate dimensions that should not be gendered.  This idea of post-processing has also been performed to improve matching with conventional analogies.  Several new versions of Word2Vec are optimized based on matching word probabilities with a penalty placed on deviations from some human determined analogies.
+ The data used to fit the Google model was a convenience sample and is not representative of the population of ways that words are or should be used.
+ 
+ The problem of removing innapropriate bias is not completely solved but that group worked on post-processing to rotate dimensions that should not be gendered.  This idea of post-processing has also been performed to improve matching with conventional analogies.  Several new versions of Word2Vec are optimized based on matching word probabilities with a penalty placed on deviations from some human determined analogies.
  
  
 # Inference, tl;dr we have none yet.
@@ -170,7 +173,7 @@ The Von Mises - Fisher Distribution is used to describe samples on the unit sphe
 Observations $x$ on a $p-1$ dimensional sphere from a Von Mises - Fisher distribution with mean direction $\mu$ and concentration around the mean $\kappa$ have density
 
 \[f_p(x,\mu,\kappa)=\frac{\kappa^{p/2-1}}{(2\pi)^{p/2}I_{p/2-1}(\kappa)}(\kappa)exp(\kappa\mu^Tx).\]
-The $I_{p/2-1}$ is a modified Bessel function of the first kind with order $p/2-1$.  
+The $I_{p/2-1}()$ is a modified Bessel function of the first kind with order $p/2-1$.  
 
 
 The MLE parameter estimate for the mean direction is the vector sum of all vectors divided by the length of the vector,

@@ -13,7 +13,7 @@ library(topicmodels)
 library(tm)
 library(ggplot2)
 library(dplyr)
-library(LDA)
+library(lda)
 ```
 
 # Clustering
@@ -290,7 +290,7 @@ Low scores of perplexity occur when testing documents are easily allocated to fe
 1. Inference is tricky with LDA.  One could try to include covariates into the topic allocations, but it isn't clear how to estimate them appropriately.  Small changes in topic allocations require changes in word allocation and will blur any inference when taking a fully parameterized approach.  This is an open area of research.  If the SSC meeting were running, one of my students *Gabe Phelan* (MSc 2020) would have a talk offering a solution.
 
 
-2. LDA and topic allocations are selected to be parsimonius for the documents but, like principal components, may not be optimal for use in further analysis.  Supervised LDA is a model that finds optimal topics that best predict a new variable $Y$.  This is akin to rotating principal components because only a small portion of variation in X is responsible for prediction of Y.  The _slda.em_ function from library _LDA_ simultaneously fits topics and a linear model or GLM to estimate Y.  
+2. LDA and topic allocations are selected to be parsimonius for the documents but, like principal components, may not be optimal for use in further analysis.  Supervised LDA is a model that finds optimal topics that best predict a new variable $Y$.  This is akin to rotating principal components because only a small portion of variation in X is responsible for prediction of Y.  The _slda.em_ function from library _lda_ simultaneously fits topics and a linear model or GLM to estimate Y.  
 
 The _LDA_ function in the library _topicmodels_ is the easiest to get started with.  However, you have much more control with library _lda_ and its _lda.collapsed.gibbs.sampler_ function, but the data structure is quite different.  Rather than working directly with the document term matrix, it takes as input the sequence of words but written as indexes of the vocabulary vector (starting from index 0).
 
