@@ -15,7 +15,7 @@ Thursday June 4th; 1:00-2:30 and 2:30-4:00
 ## R libraries to install
 - Data Acquisition tools: gutenbergr, genius, rvest, RSelenium
 - Tidyverse Tools: tidyverse, tidytext, dplyr, stringr, janitor, ggplot2
-- LDA libraries: topicmodels, tm, LDA
+- LDA libraries: topicmodels, tm, lda
 - Word2Vec library installs from github:
     - library(devtools)
     - install_github("bmschmidt/wordVectors")
