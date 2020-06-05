@@ -1,5 +1,6 @@
 name: "unstructured text"
 output_dir: "."
+exclude: ["*.md"]
 navbar:
   title: "Unstructured Text"
   left:
