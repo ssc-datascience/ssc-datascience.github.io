@@ -8,6 +8,10 @@ subtitle: "SSC - Data Science and Analytics Section"
 
 Thursday June 4th; 1:00-2:30 and 2:30-4:00
 
+## Github
+
+[All code and data](https://github.com/ssc-datascience/ssc-datascience.github.io)
+
 ## Instructors
 
 [Dave Campbell](https://people.math.carleton.ca/~davecampbell/Dave_Campbell.html) and [Nathan Taback](http://utstat.toronto.edu/nathan/)
