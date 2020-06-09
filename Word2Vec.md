@@ -1,7 +1,7 @@
 ---
 title: "Word Embeddings  (with possible pre-workshop typos)"
 author: "Dave Campbell"
-date: 2020-06-04T12:13:14-05:00
+date: 2020-06-04Part2.3
 ---
 
 ```r
@@ -13,7 +13,7 @@ library(wordVectors)
 
 
 # Word Embeddings
-The goal is to convert words into vectors of numbers such that math on the vectors makes sense as math on the words.  The classic examples are things like _king_ - _man_ + _woman_ = _queen_  or _Paris_ - _France_ + _Canada_ = _Ottawa_ or   _Winning_ - _Ottawa_ + _Toronto_ = _Leafs_ 
+The goal is to convert words into vectors of numbers such that math on the vectors makes sense as math on the words.  The classic examples are things like _king_ - _man_ + _woman_ = _queen_  or _Paris_ - _France_ + _Canada_ = _Ottawa_ 
 
 The concept is to use a model to predict a word from those around it (or the inverse: predict surrounding words from a central word).  The process converts vector(s) of dummy variable encoded words into a low dimensional subspace called an embedding dimension.  This low dimensional embedding  space allows us to do this sort of vector math on words.
 
@@ -25,7 +25,7 @@ The concept is to use a model to predict a word from those around it (or the inv
 Tomas Mikolov, Kai Chen, Greg Corrado, Jeffrey Dean (2013)
 ["Efficient Estimation of Word Representations in Vector Space"](https://arxiv.org/pdf/1301.3781.pdf). ICLR
 
-For a vocabulary of size $V$ which could be $10^6$ish, consider the current word $w(t)$ at position $t$.  From this figure, the continuous bag of Words (CBOW) model uses a window around a central word (here the window is of size 2) and fits a neural network to these 4 input vectors, each of which is zero everywhere except takes a value of 1 in the location corresponding to the word it represents.  The neural network combines these four vectors into a single hidden layer vector of with length $H<<V$.  This hidden layer is combined through an additional transformation to produce an output, here a single vector of length $V$ of probabilities for the central word.
+For a vocabulary of size $V$ which could be $10^6$ish, consider the current word $w(t)$ at position $t$.  From this figure, the continuous bag of Words (CBOW) model uses a window around a central word (here the window is of size 2) and fits a neural network to these 4 input vectors.  Each input vector is zero everywhere except takes a value of 1 in the location corresponding to the word it represents.  The neural network combines these four vectors into a single hidden layer vector of with length $H<<V$.  This hidden layer is combined through an additional transformation to produce an output, here a single vector of length $V$ of probabilities for the central word.
  
 The Skip-gram model is the opposite, taking a single one-hot encoded vector of length $V$ as an input to the hidden layer.  The hidden layer outputs 4 vectors of length $V$, each with probabilities for the words in positions within the window.
 
@@ -58,7 +58,7 @@ The workhorse library _wordVectors_ is a wrapper to the Google code.  The main f
 - *train_word2vec*(*text_to_model*,*name_of_output_file*,
         vectors=*Embedding_Dimension*,threads=*CPU_cores_to_use*,            
             cbow=*binary_logical_1_->_for_CBOW_0_for_skipgram*,window=*Window_width*,
-              iter=*Times_the_algorithm_passes_through_entire_corpus*,negative_samples=*This_is_complex_see_below*) 
+              iter=*Times_the_algorithm_passes_through_entire_corpus*,negative_samples= *This_is_complex_see_below*) 
       
       
 When fitting the model, the training must pass over the entire corpus to update parts of the neural network associated with the observed window of data.  The vast majority of the vocabulary is obviously not contained in the short window and is considered a negative (not present) observation.  You could update parts of the neural net for the entire corpus for each observed word, or you could just update a random sample taken to be a small number of vocabulary elements. This number of words to update is the _negative samples_ input.  Typically for a very large corpus we keep this around 2 or 5 since there are many other opportunities to update the model and larger numbers take longer to run, but for a smaller corpus we often increase to something like 10 or 15.  Results are generally quite robust to this number.  On a realted note, with a large corpus, we typically use a smaller number of iterations since each pass through the corpus has a lot of training examples.
