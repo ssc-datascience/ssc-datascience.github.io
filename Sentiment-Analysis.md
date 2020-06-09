@@ -1,5 +1,5 @@
 ---
-title: "Sentiment Analysis (with possible pre-workshop typos)"
+title: "Sentiment Analysis"
 author: "Dave Campbell"
 date: "2020-06-04Part2.1"
 ---
@@ -78,7 +78,7 @@ for(songNumber in 1:dim(tracklist)[1]){
 LyricsDesire$track_title %>% table
 ```
 
-I've included a System Sleep call since this will slow down the calls to the genius webpage.  This is a necessary tool when web scraping, even through an API.  Here that step isn't enough so I also look for song length returned by the function call and keep trying as long as it is empty for up to 10 tries.  Sometimes an artist puts an instrumental song or doesn't provide lyrics, so the _counter_ for the number of tries avoids infinite loops. 
+I've included a System Sleep call since this will slow down the calls to the genius webpage.  This is a necessary tool when web scraping, and is kind when using an API sop as to not overload their server.  Here that step isn't enough so I also look for song length returned by the function call.  The code keeps querrying the API as long as the song returns empty for up to 10 tries.  Sometimes an artist puts an instrumental song or doesn't provide lyrics, so the _counter_ for the number of tries avoids infinite loops. 
 
 
 
@@ -237,7 +237,7 @@ There appears to be strong evidence of a change in distribution of sentiments be
 
 
 
-# Going furhter: Improving the lexicon by considering negation
+# Going further: Improving the lexicon by considering negation
 
 Using a lexicon, consider the phrase: 
 - "my homemade bread is not bad"  
@@ -256,11 +256,11 @@ The bigram object _Biebgrams_ splits the text into sliding groupings of two word
 Bieber = rbind(Lyrics1,Lyrics2) %>%
        mutate(originalline = lyric) 
 
-# glue NA to the beginning of each string.  The result is that now all of teh original words will be used in the sentiment lexicon replacement.
+# glue NA to the beginning of each string.  The result is that now all of the original words will be used in the sentiment lexicon replacement.
 Bieber$lyric = stringr::str_replace_all(Bieber$lyric, pattern="^", replacement = "NA ")
        
 
-# Split into bigrams, separate apart the bigram into "PreWord" and "word" and perform lexicon sentiment replacement on the second term ("word") while keeping way too many interim steps for illustration:
+# Split into bigrams, separate apart the bigram into "PreWord" and "word" and perform lexicon based sentiment analysis on the second term ("word").  Keeping way too many interim steps for illustration we get:
 
 Biebgrams   =  Bieber %>%
             unnest_tokens(output = bigram,input = lyric, token = "ngrams", n=2) %>%

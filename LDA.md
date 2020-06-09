@@ -1,7 +1,7 @@
 ---
-title: "Topic Modelling; LDA (with possible pre-workshop typos)"
+title: "Topic Modelling; LDA (with added references from the workshop chat)"
 author: "Dave Campbell"
-date: "03/06/2020"
+date: "2020-06-04Part2.2"
 
 ---
 
@@ -56,11 +56,11 @@ LDA was constructed based on a generative process for each document  in a corpus
 
 2. For document $d$ sample a topic allocation $\theta_d\sim Dir(\alpha)$.  These are the topic proportions for this document.
 
-3. For each word $w_n$, $n\in 1,...,N_d$ in document $d$: 
+3. For each word $w_n,\  n\in 1,...,N_d$ in document $d$: 
      a. Sample its topic $z_{dn} \sim Multinomial(\theta_d)$.      The $n^{th}$ word position in document $d$ has a single latent topic $z_{dn}$.
      b. Sample a word $w_n$ from $p(w_n \mid  \phi_{z_{dn}})$, a categorical probability disribution with word probability $\phi_{z_{dn}}$ that is specific to the topic $z_n$. 
      
-Including priors $\phi\sim Dir(\beta)$ and $\theta \sim Dir(\alpha)$ we obtain the graphical model for what the original Blei paper called smoothed LDA (although they used slightly different notation, the above is pretty standard notation)
+As a graphical model for what the original Blei paper called smoothed LDA (although they used slightly different notation, the above is pretty standard notation)
 ![LDAmodel](LDAgraphic.png "What the Blei et al paper called smoothed LDA")
 
 
@@ -101,7 +101,7 @@ unique(Dickensbooks$title)
 ```
 
 
-Let's split books into chunks and treat chunks as documents.  It doesn't matter how long a document is, but working with book chapters will have a short compute time.
+Let's split books into chunks and treat chunks as documents.  It doesn't matter how long a document is, but working with book chapters will have a short compute time compared to bringing in more than 9 books to cluster.
 
 
 
@@ -135,8 +135,10 @@ table(tidytext::stop_words$lexicon)
 
 We could further build up character names in the list of stopwords, but in real life we may be more interested in performing this clustering on insurance reports, court documents, and proper names shouldn't matter as they amount to noise in the documents.
 
+It is impossible to separate apart data cleaning from analysis when dealing with text data.  With any data type,  automated data cleaning will have unintended consequenses, but with text we should think carefully about (and assess) their impact.
+
 ```r
-# build my own stop words
+# build my own stop words to include single letter words
 stops = data.frame(word = c(tm::stopwords(), letters) )
 
 
@@ -182,7 +184,7 @@ LDA3 = topicmodels::LDA(DTM, k,method = "Gibbs") #collapsed Gibbs came after the
 
 
 
-At this point you are probably wondering why I didn't specify the number of Gibbs samples and the burn in,... Well, often in literature and in practice people report using 20,000ish Gibbs samples.  Sorry that's a typo, it should be *20ish* Collapsed Gibbs samples.  In general Collapsed Gibbs sampling is used as a stochastic optimizer and get close to a local mode.  The collapsed part means that we marginalize over some parameters and then estimate those marginalized parameters afterwards.   
+At this point you are probably wondering why I didn't specify the number of Gibbs samples and the burn in,... Well, often in literature and in practice people report using 20,000ish Gibbs samples.  Sorry that's a typo, it should be *20ish* Collapsed Gibbs samples.  In general Collapsed Gibbs sampling is used as a stochastic optimizer and get close to a local mode.  The only part returned is the final iteration of the sampler.  The collapsed part means that we marginalize over some parameters and then estimate those marginalized parameters afterwards.   
 
 
 We typically marginalize over topic allocations and word within topic allocations
@@ -202,14 +204,14 @@ For Document d, topic k, word index n, and vocabulary of size V after the sample
 \beta_r}\]
 
 
-Samplers have to deal with an enormous label switching problem rendering inference on $theta$ or $phi$ complex and essentially useless unless one can condition on some sort of topic structure.  As a result you won't be able to get the (Collapsed) Gibbs samples from any of the software, they just return $\hat{\theta}$ and $\hat{\phi}$.
+Samplers have to deal with an enormous label switching problem rendering inference on $\theta$ or $\phi$ complex and essentially useless unless one can condition on some sort of topic structure.  As a result you won't be able to get the (Collapsed) Gibbs samples from any of the software, they just return $\hat{\theta}$ and $\hat{\phi}$.
 
 Variational methods directly target $\theta$ and $\phi$ and are  used but Collapsed Gibbs tends to be fastest at larger scales.
 
 # Some insight from our book clustering
 
 
-Their $\beta$ = probability of a word given a topic
+Their $\beta$ = our probability of a word given a topic
 ```r
 
 tidy_lda = tidy(LDA3)
@@ -250,7 +252,7 @@ top_terms %>%
 
 
 
-Their $\gamma$ = probability of topic within document
+Their $\gamma$ = our probability of topic within document
 
 ```r
 lda_gamma =  tidy(LDA3, matrix = "gamma")
@@ -271,14 +273,14 @@ lda_gamma
 
 # Further tricks
 
-1. If all the documents right now were from newspapers terms like _Trump_ and _George Floyd_ show up in every article.  They could be considered stopwords.  You could use tf_idf to find and suggest new stopwords, but generally those terms become pushed into a very common topic that appears heavily weighted across all documents.  Typically what happens is the more interesting distinguishing words then appear further down the prevalence within a topic.
+1. If all the documents right now were from newspapers terms like _George_Floyd_ show up in every article.  They could be considered stopwords.  You could also use tf_idf to find and suggest new stopwords, but it doesn't matter with LDA.  Exceedingly common terms either become pushed into a very common topic that appears heavily weighted across all documents or these terms show up as being exceedingly likely within all topics.  In the latter case, the more interesting and distinguishing words then appear further down the prevalence within a topic.
 
 
 
 
 
-2. Selecting the number of topics.  Typically one would use perplexity.  We split the data into training and testing data.  The LDA model is built on the training data, then perplexity is calculated over the testing data set.  Perplexity is the geometric mean per word likelihood,  examining the probability of the words given topic allocation structure and words within topics.  
-\[Perplexity(Doc_{test}) = exp\left\{-\frac{\sum_{doc}log(p(w\mid\theta,\phi))}{\sum_{doc}\{\#\mbox{words is in doc}\}}\right\}\]
+2. Selecting the number of topics.  Typically one would use perplexity.  We split the data into training and testing data.  The LDA model is built on the training data, then perplexity is calculated over the testing data set for a variety of $K$ values.  Perplexity is the geometric mean per word likelihood,  examining the probability of the words given topic allocation structure and words within topics.  
+\[Perplexity(Doc_{test},K) = exp\left\{-\frac{\sum_{doc}log(p(w\mid\theta,\phi))}{\sum_{doc}\{\#\mbox{words in doc}\}}\right\}\]
 Low scores of perplexity occur when testing documents are easily allocated to few topics with highly probable words.  Perplexity measures how well new documents fit into the topic partitions and hense the ability to compress the data.  In soft clustering like LDA, we often want interpretable clusters which are easier with more clusters than perplexity would suggest.  
 
 3. Short documents (like Twitter) are too sparse for LDA to be directly useful. Finding ways of clustering tweets is an active area of research.  More words are better, especially with a large vocabulary.
@@ -287,7 +289,7 @@ Low scores of perplexity occur when testing documents are easily allocated to fe
 
 # Inference, tl;dr we have some but there remain open problems.
 
-1. Inference is tricky with LDA.  One could try to include covariates into the topic allocations, but it isn't clear how to estimate them appropriately.  Small changes in topic allocations require changes in word allocation and will blur any inference when taking a fully parameterized approach.  This is an open area of research.  If the SSC meeting were running, one of my students *Gabe Phelan* (MSc 2020) would have a talk offering a solution.
+1. Inference is tricky with LDA.  One could try to include covariates into the topic allocations, but it isn't clear how to estimate them appropriately.  Small changes in topic allocations require changes in word allocation and will blur any inference when taking a fully parameterized approach.  This is an open area of research.
 
 
 2. LDA and topic allocations are selected to be parsimonius for the documents but, like principal components, may not be optimal for use in further analysis.  Supervised LDA is a model that finds optimal topics that best predict a new variable $Y$.  This is akin to rotating principal components because only a small portion of variation in X is responsible for prediction of Y.  The _slda.em_ function from library _lda_ simultaneously fits topics and a linear model or GLM to estimate Y.  
@@ -314,8 +316,8 @@ get_terms = function(x, vocab) {
 }
 documents = lapply(doclist, get_terms, vocab)
 # Note that the vocabulary index needs to start with index 0 since it is passed to C 
-# whereas R begins with index 1
-#Check that you can map the time series of vocabulary back to the original phrase
+# Indexing in R begins with index 1
+# Check that you can map the time series of vocabulary back to the original phrase
 
 vocab[documents[[1]][1,]+1]
 ```
@@ -338,7 +340,7 @@ load("content/post/LookAt_yeartrackalbum.RData")
 
 ```
 
-The Beatles released records with different titles in the US and UK, so in scraping their discography I ended up with some duplicates.  Focusing on their UK releases we get rid of this problem.
+The Beatles released records with different titles in the US and UK, so in obtaining their discography I ended up with some duplicates.  Focusing on their UK releases we get rid of this problem.
 
 
 ```r
@@ -357,6 +359,7 @@ UKalbums = c("Please Please Me",
                 "Let It Be")
 
 # we could but won't remove stop words
+# songs typically have a small vocabulary so agressive stopword removal causes big problems by making th eDTM very sparse.
 #stops = data.frame(word=tm::stopwords())                
 #stops = tidytext::stop_words               
 wordcount = yeartrackalbum  %>%  filter(album %in% UKalbums) %>% #just UK releases
@@ -378,7 +381,7 @@ topics = tidy(BeatlesLDA, matrix = "beta")
 
 TopWords = topics %>%
   group_by(topic) %>%               # take an action within topic values
-   top_n(20, beta) %>%               # find the largest 10 values based on the 'beta' column
+   top_n(20, beta) %>%               # find the largest  values based on the 'beta' column
   ungroup() %>%                        # stop acting within a topic
   arrange(topic, -beta)                 # sort them 
 
@@ -391,15 +394,16 @@ TopWords %>%
   scale_x_reordered()
 ```
 
-In many cases this picks out very specific songs because of the sparcity of terms.  We could remove sparse words that only appear in a few topics:
+In many cases this picks out very specific songs because of the sparcity of terms.  We could remove sparse words that only appear in a few topics.  Ideally words like Octopus, Eggman, and MeterMaid wouldn't be topic forming:
 
 ```r
 # remove vocabulary terms (columns) which are more than 96.7 percent zero 
 DTM95 = removeSparseTerms(DTM,.967)
 # selecting the threshold is a balancing act.  We only have 152 songs so a word must be in at least 5 songs to be kept.
 ```
-However, there is at least one song with only one or two unique words that probably shouldn't be in the mix.  Sometimes with music we end up lyrical placeholders for instrumental songs.  
-Those songs since they are akin to outliers in simple linear regression.  We will remove sparse documents, i.e. those with less than 5 words or less than 5 unique words since the latter will overemphasize some words.  We could just add way more topics and then a few topics become garbage collectors capturing single documents but we do want to explore the general themes if possible.
+We could have used tf_idf here, so it's important to remember that it is impossible to remove the impact of data cleaning on the analysis.  
+There is at least one song with only one or two unique words that probably shouldn't be in the mix.  Sometimes with music we end up lyrical placeholders for instrumental songs.  
+Those songs since they are akin to outliers in simple linear regression.  We will remove sparse documents, i.e. those with less than 5 words or less than 5 unique words since the latter will overemphasize some words.  We could just add way more topics and then a few topics become garbage collectors capturing single documents but we do want to explore the general themes with few topics and hense short compute time.
 
 
 ```r
@@ -417,10 +421,11 @@ k=9
 BeatlesLDA = LDA(DTM95, k,method="Gibbs") 
 topics = tidy(BeatlesLDA, matrix = "beta")
 
+# recycled code:
 
 TopWords = topics %>%
   group_by(topic) %>%               # take an action within topic values
-   top_n(20, beta) %>%               # find the largest 10 values based on the 'beta' column
+   top_n(20, beta) %>%               # find the largest  values based on the 'beta' column
   ungroup() %>%                        # stop acting within a topic
   arrange(topic, -beta)                 # sort them 
 
@@ -436,7 +441,7 @@ TopWords %>%
 
 
 
-# references and more to read
+# References and more to read
 
 Using LDA on scientific papers:
 
@@ -457,7 +462,39 @@ Qiu et al (2014) "Collapsed Gibbs Sampling for Latent Dirichlet Allocation on Sp
 JMLR: Workshop and Conference Proceedings 36:17–28,
 http://proceedings.mlr.press/v36/qiu14.pdf
 
+## Suggestions from the workshop chat.
+Thank you for these suggestions:
 
+Evaluation of LDA:
+
+https://mimno.infosci.cornell.edu/papers/2017_fntir_tm_applications.pdf
+
+Blei's Intro to Variational Inference:
+http://www.cs.columbia.edu/~blei/fogm/2015F/notes/mixed-membership.pdf
+
+Review article on probabilistic topic models:
+http://www.cs.columbia.edu/~blei/papers/Blei2012.pdf
+
+Supervised LDA:
+https://papers.nips.cc/paper/3328-supervised-topic-models.pdf
+
+
+Uniform Manifold Approximation and Projection for Dimension Reduction:
+https://umap-learn.readthedocs.io/en/latest/index.html
+
+
+Equivalence of LDA and Nonnegative Matrix Factorization 
+https://www.elen.ucl.ac.be/Proceedings/esann/esannpdf/es2016-162.pdf
+
+Bayesian Non-negative matrix factorization with stochastic variational inference
+http://www.columbia.edu/~jwp2128/Papers/PaisleyBleiJordan2014.pdf
+
+
+Structural Text Models:
+A Model of Text for Experimentation in the Social Sciences
+https://www.tandfonline.com/doi/full/10.1080/01621459.2016.1141684 (paywall)
+https://scholar.princeton.edu/sites/default/files/bstewart/files/stm.pdf (free)
+R tutorial for STM: https://cran.r-project.org/web/packages/stm/vignettes/stmVignette.pdf
 
 
 
