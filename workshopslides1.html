@@ -130,18 +130,18 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ──────────────────────────── tidyverse 1.3.0 ──
+## ── Attaching packages ─────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
-## ✓ ggplot2 3.3.0     ✓ purrr   0.3.4
-## ✓ tibble  3.0.1     ✓ dplyr   0.8.5
-## ✓ tidyr   1.0.3     ✓ stringr 1.4.0
+## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.1     ✓ dplyr   1.0.0
+## ✓ tidyr   1.1.0     ✓ stringr 1.4.0
 ## ✓ readr   1.3.1     ✓ forcats 0.5.0
 ```
 
 ```
-## ── Conflicts ─────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
@@ -722,8 +722,8 @@ str_extract(tot[[1]],"\\d+(?= documents)")
 str_view_all(tot[[1]],"\\d+(?= documents)")
 ```
 
-<div id="htmlwidget-83b95590d64dcdf84ccc" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-83b95590d64dcdf84ccc">{"x":{"html":"<ul>\n  <li>1–10 of <span class='match'>17<\/span> documents found<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-2dc284904b6d68702d66" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2dc284904b6d68702d66">{"x":{"html":"<ul>\n  <li>1–10 of <span class='match'>17<\/span> documents found<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -809,8 +809,8 @@ A	formal	language	for	specifying	text	strings.
 str_view_all("Do you agree that stats is popular?", "\\w")
 ```
 
-<div id="htmlwidget-a73c97f55f3039014781" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-a73c97f55f3039014781">{"x":{"html":"<ul>\n  <li><span class='match'>D<\/span><span class='match'>o<\/span> <span class='match'>y<\/span><span class='match'>o<\/span><span class='match'>u<\/span> <span class='match'>a<\/span><span class='match'>g<\/span><span class='match'>r<\/span><span class='match'>e<\/span><span class='match'>e<\/span> <span class='match'>t<\/span><span class='match'>h<\/span><span class='match'>a<\/span><span class='match'>t<\/span> <span class='match'>s<\/span><span class='match'>t<\/span><span class='match'>a<\/span><span class='match'>t<\/span><span class='match'>s<\/span> <span class='match'>i<\/span><span class='match'>s<\/span> <span class='match'>p<\/span><span class='match'>o<\/span><span class='match'>p<\/span><span class='match'>u<\/span><span class='match'>l<\/span><span class='match'>a<\/span><span class='match'>r<\/span>?<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-2e3ca4a3b64346b652f9" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2e3ca4a3b64346b652f9">{"x":{"html":"<ul>\n  <li><span class='match'>D<\/span><span class='match'>o<\/span> <span class='match'>y<\/span><span class='match'>o<\/span><span class='match'>u<\/span> <span class='match'>a<\/span><span class='match'>g<\/span><span class='match'>r<\/span><span class='match'>e<\/span><span class='match'>e<\/span> <span class='match'>t<\/span><span class='match'>h<\/span><span class='match'>a<\/span><span class='match'>t<\/span> <span class='match'>s<\/span><span class='match'>t<\/span><span class='match'>a<\/span><span class='match'>t<\/span><span class='match'>s<\/span> <span class='match'>i<\/span><span class='match'>s<\/span> <span class='match'>p<\/span><span class='match'>o<\/span><span class='match'>p<\/span><span class='match'>u<\/span><span class='match'>l<\/span><span class='match'>a<\/span><span class='match'>r<\/span>?<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 - `\d` matches any digit, 
@@ -823,8 +823,8 @@ str_view_all("Do you agree that stats is popular?", "\\w")
 str_view_all("There are at least 200 people in this zoom!", "\\d")
 ```
 
-<div id="htmlwidget-cb409a867b4cf64a5f5c" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-cb409a867b4cf64a5f5c">{"x":{"html":"<ul>\n  <li>There are at least <span class='match'>2<\/span><span class='match'>0<\/span><span class='match'>0<\/span> people in this zoom!<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-c5791a8c3cacc23db6ee" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c5791a8c3cacc23db6ee">{"x":{"html":"<ul>\n  <li>There are at least <span class='match'>2<\/span><span class='match'>0<\/span><span class='match'>0<\/span> people in this zoom!<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 # Regular Expressions: Alternates (Disjunctions) 
@@ -837,8 +837,8 @@ str_view_all("There are at least 200 people in this zoom!", "\\d")
 str_view_all(string = c("cat","Cat"), pattern = "[cC]") # match c or C
 ```
 
-<div id="htmlwidget-1a775f1796a6065157c0" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1a775f1796a6065157c0">{"x":{"html":"<ul>\n  <li><span class='match'>c<\/span>at<\/li>\n  <li><span class='match'>C<\/span>at<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-56feb0fb8d66d8686f22" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-56feb0fb8d66d8686f22">{"x":{"html":"<ul>\n  <li><span class='match'>c<\/span>at<\/li>\n  <li><span class='match'>C<\/span>at<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 # Regular Expressions: Alternates (Disjunctions) 
@@ -850,8 +850,8 @@ str_view_all(string = c("cat","Cat"), pattern = "[cC]") # match c or C
 str_view(string = c("cat","Cat 900"), pattern = "[0-9]") # first match of any digit 
 ```
 
-<div id="htmlwidget-557857b9117bf32c90ef" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-557857b9117bf32c90ef">{"x":{"html":"<ul>\n  <li>cat<\/li>\n  <li>Cat <span class='match'>9<\/span>00<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-ab73a044b7b5ad9d07fd" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ab73a044b7b5ad9d07fd">{"x":{"html":"<ul>\n  <li>cat<\/li>\n  <li>Cat <span class='match'>9<\/span>00<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -865,8 +865,8 @@ str_view_all(string = c("xenophobia causes problems"),
              pattern = "[^cxp]") # neither c nor x nor p 
 ```
 
-<div id="htmlwidget-4779c7bc108a83c58bef" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4779c7bc108a83c58bef">{"x":{"html":"<ul>\n  <li>x<span class='match'>e<\/span><span class='match'>n<\/span><span class='match'>o<\/span>p<span class='match'>h<\/span><span class='match'>o<\/span><span class='match'>b<\/span><span class='match'>i<\/span><span class='match'>a<\/span><span class='match'> <\/span>c<span class='match'>a<\/span><span class='match'>u<\/span><span class='match'>s<\/span><span class='match'>e<\/span><span class='match'>s<\/span><span class='match'> <\/span>p<span class='match'>r<\/span><span class='match'>o<\/span><span class='match'>b<\/span><span class='match'>l<\/span><span class='match'>e<\/span><span class='match'>m<\/span><span class='match'>s<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-c6983a8a05f265063048" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c6983a8a05f265063048">{"x":{"html":"<ul>\n  <li>x<span class='match'>e<\/span><span class='match'>n<\/span><span class='match'>o<\/span>p<span class='match'>h<\/span><span class='match'>o<\/span><span class='match'>b<\/span><span class='match'>i<\/span><span class='match'>a<\/span><span class='match'> <\/span>c<span class='match'>a<\/span><span class='match'>u<\/span><span class='match'>s<\/span><span class='match'>e<\/span><span class='match'>s<\/span><span class='match'> <\/span>p<span class='match'>r<\/span><span class='match'>o<\/span><span class='match'>b<\/span><span class='match'>l<\/span><span class='match'>e<\/span><span class='match'>m<\/span><span class='match'>s<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 # Regular Expressions: Anchors
@@ -881,8 +881,8 @@ str_view_all(string = str,
              pattern = "^x|s$") 
 ```
 
-<div id="htmlwidget-5fcaaf832098d85ff718" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5fcaaf832098d85ff718">{"x":{"html":"<ul>\n  <li><span class='match'>x<\/span>enophobia causes problem<span class='match'>s<\/span><\/li>\n  <li>Xenophobia causes problem<span class='match'>s<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-530aef1c5f5f829fca43" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-530aef1c5f5f829fca43">{"x":{"html":"<ul>\n  <li><span class='match'>x<\/span>enophobia causes problem<span class='match'>s<\/span><\/li>\n  <li>Xenophobia causes problem<span class='match'>s<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 # Regular Expressions: Quantifiers
@@ -898,8 +898,8 @@ str_view_all(string = c("colour","color","colouur"),
              pattern = "colou+r")
 ```
 
-<div id="htmlwidget-73a4eed8cf4147802f88" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-73a4eed8cf4147802f88">{"x":{"html":"<ul>\n  <li><span class='match'>colour<\/span><\/li>\n  <li>color<\/li>\n  <li><span class='match'>colouur<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-98d6b188138c34f969df" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-98d6b188138c34f969df">{"x":{"html":"<ul>\n  <li><span class='match'>colour<\/span><\/li>\n  <li>color<\/li>\n  <li><span class='match'>colouur<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 # Regular Expressions: Groups/Precedence
@@ -912,8 +912,8 @@ str_view_all(string = c("colour","color","colouur"),
 str_view_all(string = c("puppy", "puppies"), pattern = "pupp(y|ies)") 
 ```
 
-<div id="htmlwidget-0ec2f9fa469e4ab3c8e2" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-0ec2f9fa469e4ab3c8e2">{"x":{"html":"<ul>\n  <li><span class='match'>puppy<\/span><\/li>\n  <li><span class='match'>puppies<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-dcd74af36c9148655e41" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-dcd74af36c9148655e41">{"x":{"html":"<ul>\n  <li><span class='match'>puppy<\/span><\/li>\n  <li><span class='match'>puppies<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 # Example from p-value paper
@@ -965,8 +965,8 @@ ppat &lt;- "(\\s|\\()[Pp]{1}(\\s|-)*(value|values)?(\\s)"
 str_view_all(str, pattern = ppat)
 ```
 
-<div id="htmlwidget-a45cb8c1b2ef519d2684" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-a45cb8c1b2ef519d2684">{"x":{"html":"<ul>\n  <li>The result was significant <span class='match'>(p <\/span>< <\/li>\n  <li>The result was significant<span class='match'> P <\/span>= <\/li>\n  <li>The result was not significant p-value(s) less than <\/li>\n  <li>The result was significant P-value(s) ≤ <\/li>\n  <li>The result was significant<span class='match'> P <\/span>value(s) < <\/li>\n  <li>The result was significant<span class='match'> p <\/span>value(s) < <\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-cbdfc3bfe857757b5262" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-cbdfc3bfe857757b5262">{"x":{"html":"<ul>\n  <li>The result was significant <span class='match'>(p <\/span>< <\/li>\n  <li>The result was significant<span class='match'> P <\/span>= <\/li>\n  <li>The result was not significant p-value(s) less than <\/li>\n  <li>The result was significant P-value(s) ≤ <\/li>\n  <li>The result was significant<span class='match'> P <\/span>value(s) < <\/li>\n  <li>The result was significant<span class='match'> p <\/span>value(s) < <\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 ]
 
 But this doesn't capture "p value(s)".  Is there a mistake in the data extraction? 
@@ -981,8 +981,8 @@ ppat &lt;- "(\\s|\\()[Pp]{1}(\\s|-)*(value|values|value\\(s\\))?(\\s)"
 str_view_all(str, pattern = ppat)
 ```
 
-<div id="htmlwidget-41a17b3d2f03f6e06440" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-41a17b3d2f03f6e06440">{"x":{"html":"<ul>\n  <li>The result was significant <span class='match'>(p <\/span>< <\/li>\n  <li>The result was significant<span class='match'> P <\/span>= <\/li>\n  <li>The result was not significant<span class='match'> p-value(s) <\/span>less than <\/li>\n  <li>The result was significant<span class='match'> P-value(s) <\/span>≤ <\/li>\n  <li>The result was significant<span class='match'> P value(s) <\/span>< <\/li>\n  <li>The result was significant<span class='match'> p value(s) <\/span>< <\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-ecea804fec8ddb0131ac" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ecea804fec8ddb0131ac">{"x":{"html":"<ul>\n  <li>The result was significant <span class='match'>(p <\/span>< <\/li>\n  <li>The result was significant<span class='match'> P <\/span>= <\/li>\n  <li>The result was not significant<span class='match'> p-value(s) <\/span>less than <\/li>\n  <li>The result was significant<span class='match'> P-value(s) <\/span>≤ <\/li>\n  <li>The result was significant<span class='match'> P value(s) <\/span>< <\/li>\n  <li>The result was significant<span class='match'> p value(s) <\/span>< <\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 &lt;https://regex101.com/&gt; is also helpful for visualizing regular expressions.
 

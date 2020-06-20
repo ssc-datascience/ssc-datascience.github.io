@@ -49,7 +49,7 @@ Thursday June 4th; 1:00-2:30 and 2:30-4:00
 
 [stringr cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/strings.pdf)
 
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/LyoID6jAi08" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 # Part 2 
@@ -72,4 +72,4 @@ Statistical Models for Unstructured Text
 [Word2Vec - md](Word2Vec.md), [Word2Vec - html](Word2Vec.html)
 
 
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/1wpUeqXO_h8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
